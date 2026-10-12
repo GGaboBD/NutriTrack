@@ -1,0 +1,69 @@
+/* ============================================================
+   Optimizaciones Específicas para iPhone / Safari Móvil
+   ============================================================ */
+
+/* Prevenir zoom no deseado al enfocar inputs en iOS (debe tener >= 16px) */
+input, select, textarea {
+  font-size: 16px !important;
+}
+
+/* Área segura de iPhone con notch / Isla Dinámica */
+@supports (padding-top: env(safe-area-inset-top)) {
+  .app-header {
+    padding-top: max(12px, env(safe-area-inset-top));
+  }
+  
+  .tab-bar {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+
+  body {
+    padding-bottom: calc(75px + env(safe-area-inset-bottom, 20px));
+  }
+}
+
+/* Toque táctil elástico y desactivar selección accidental */
+.tab-btn, .btn-add-food, .date-btn, .btn-primary-action, .cat-pill {
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+}
+
+/* Botones con área táctil mínima de 44x44px según Apple HIG */
+.btn-remove-item {
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.date-btn {
+  min-height: 38px;
+}
+
+.tab-btn {
+  min-height: 48px;
+}
+
+/* Scroll elástico nativo de iOS */
+.sheet-content, .food-picker-results, .category-pills-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Ajustes para pantallas grandes (Desktop / iPad) */
+@media (min-width: 768px) {
+  body {
+    background-color: #E5E5EA;
+  }
+
+  .app-container {
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+    background-color: var(--ios-bg);
+    min-height: 100vh;
+  }
+
+  .tab-bar {
+    max-width: 540px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px 20px 0 0;
+  }
+}

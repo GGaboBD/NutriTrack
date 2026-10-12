@@ -1,0 +1,448 @@
+/* ============================================================
+   Amrit Palace — Luxury Editorial Design System
+   Parchment canvas, whisper-weight serif headlines, hairline borders.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  /* Colors */
+  --color-parchment: #d8cbb8;
+  --color-linen: #bfb4a3;
+  --color-warm-stone: #b6ab9c;
+  --color-walnut: #978e81;
+  --color-espresso: #615b53;
+  --color-onyx-warm: #2c2c2c;
+  --color-midnight-roast: #292622;
+  --color-saffron-glow: #d49653; /* Sole chromatic accent: used strictly 2-3 times per fold */
+
+  /* Typography Fonts */
+  --font-serif-display: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+  /* Typography Weights */
+  --weight-light: 300; /* Non-negotiable for display serif */
+  --weight-medium: 500;
+  --weight-bold: 700;
+
+  /* Geometry & Radii */
+  --radius-cards: 0px;
+  --radius-buttons: 3px;
+  --radius-inputs: 3px;
+  --radius-tags: 3px;
+
+  /* Spacing */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  /* Layout */
+  --max-width: 1440px;
+}
+
+/* Reset & Editorial Flatness */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-shadow: none !important; /* Zero elevation: Depth via tone shifts and hairlines */
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  font-family: var(--font-sans);
+  background-color: var(--color-parchment);
+  color: var(--color-onyx-warm);
+  font-size: 15px;
+  line-height: 1.4;
+  letter-spacing: -0.15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-color: var(--color-parchment);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* ============================================================
+   Typography Hierarchy
+   ============================================================ */
+
+/* Signature whisper-weight 300 serif headings in uppercase */
+.editorial-display {
+  font-family: var(--font-serif-display);
+  font-weight: 300;
+  text-transform: uppercase;
+  letter-spacing: -0.04em;
+  line-height: 0.85;
+  color: var(--color-onyx-warm);
+}
+
+.heading-xl {
+  font-size: 56px;
+}
+
+.heading-lg {
+  font-size: 38px;
+}
+
+.heading-md {
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+}
+
+.heading-sm {
+  font-size: 20px;
+  letter-spacing: -0.025em;
+  line-height: 1.0;
+}
+
+/* Structural sans-serif for labels, body and buttons */
+.sans-label {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-espresso);
+}
+
+.sans-body {
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--color-espresso);
+  line-height: 1.45;
+}
+
+.sans-meta {
+  font-family: var(--font-sans);
+  font-size: 12px;
+  color: var(--color-walnut);
+}
+
+/* Hairline Editorial Divider */
+.hairline-rule {
+  width: 100%;
+  height: 1px;
+  background-color: var(--color-warm-stone);
+  border: none;
+  margin: var(--space-md) 0;
+}
+
+/* ============================================================
+   Buttons & Interactive Controls (3px Radius, Ghost Aesthetic)
+   ============================================================ */
+
+.btn-editorial-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--color-onyx-warm);
+  border-radius: var(--radius-buttons);
+  color: var(--color-onyx-warm);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+  min-height: 44px;
+}
+
+.btn-editorial-ghost:hover {
+  background: var(--color-onyx-warm);
+  color: var(--color-parchment);
+}
+
+.btn-editorial-ghost:active {
+  background: var(--color-midnight-roast);
+  color: var(--color-parchment);
+}
+
+.btn-editorial-dark {
+  background: var(--color-onyx-warm);
+  border: 1px solid var(--color-onyx-warm);
+  color: var(--color-parchment);
+  border-radius: var(--radius-buttons);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  padding: 10px 18px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  transition: background 0.2s ease;
+}
+
+.btn-editorial-dark:hover {
+  background: var(--color-midnight-roast);
+}
+
+.btn-editorial-saffron {
+  background: var(--color-saffron-glow);
+  border: 1px solid var(--color-saffron-glow);
+  color: #FFFFFF;
+  border-radius: var(--radius-buttons);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 18px;
+  cursor: pointer;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-editorial-saffron:hover {
+  filter: brightness(0.95);
+}
+
+/* Micro Action Buttons */
+.btn-micro {
+  min-height: 32px;
+  padding: 4px 10px;
+  font-size: 11px;
+}
+
+/* ============================================================
+   Inputs & Selectores
+   ============================================================ */
+
+.editorial-input, .editorial-select {
+  width: 100%;
+  background: var(--color-parchment);
+  border: 1px solid var(--color-warm-stone);
+  border-radius: var(--radius-inputs);
+  color: var(--color-onyx-warm);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s ease;
+  min-height: 44px;
+}
+
+.editorial-input:focus, .editorial-select:focus {
+  border-color: var(--color-onyx-warm);
+}
+
+/* ============================================================
+   Cards & Surfaces (0px Sharp Geometry)
+   ============================================================ */
+
+.editorial-card {
+  background: var(--color-parchment);
+  border: 1px solid var(--color-warm-stone);
+  border-radius: var(--radius-cards);
+  padding: 22px;
+  margin-bottom: var(--space-md);
+}
+
+.editorial-card-elevated {
+  background: var(--color-linen);
+  border: 1px solid var(--color-warm-stone);
+  border-radius: var(--radius-cards);
+  padding: 22px;
+  margin-bottom: var(--space-md);
+}
+
+/* ============================================================
+   Header & Top Navigation
+   ============================================================ */
+
+.editorial-header {
+  border-bottom: 1px solid var(--color-warm-stone);
+  background: var(--color-parchment);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.brand-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.brand-logo-text {
+  font-family: var(--font-serif-display);
+  font-weight: 300;
+  font-size: 28px;
+  text-transform: uppercase;
+  letter-spacing: -0.03em;
+  color: var(--color-onyx-warm);
+}
+
+.brand-submark {
+  font-family: var(--font-sans);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-walnut);
+}
+
+/* Profile Switcher Trigger */
+.profile-pill-trigger {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--color-linen);
+  border: 1px solid var(--color-warm-stone);
+  border-radius: var(--radius-buttons);
+  padding: 6px 14px;
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.profile-avatar-circle {
+  width: 26px;
+  height: 26px;
+  background: var(--color-onyx-warm);
+  color: var(--color-parchment);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.profile-name-text {
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: var(--color-onyx-warm);
+}
+
+/* ============================================================
+   Editorial Progress Bars (Flat Saffron Glow on Linen)
+   ============================================================ */
+
+.editorial-progress-track {
+  width: 100%;
+  height: 8px;
+  background: var(--color-linen);
+  border-radius: 0px;
+  position: relative;
+  overflow: hidden;
+  margin: 10px 0;
+}
+
+.editorial-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--color-saffron-glow);
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.editorial-progress-fill.status-exceeded {
+  background: #A63A2B; /* Rojo ladrillo cálido para no romper la estética */
+}
+
+/* ============================================================
+   Micro Banners & Toast Messages
+   ============================================================ */
+
+.in-app-banner {
+  background: var(--color-midnight-roast);
+  color: var(--color-parchment);
+  padding: 12px 20px;
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-warm-stone);
+  animation: slideDown 0.3s ease;
+}
+
+.in-app-banner-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-saffron-glow);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+/* Modal Bottom Sheets & Overlays */
+.editorial-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(41, 38, 34, 0.65);
+  z-index: 200;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  padding: 16px;
+}
+
+.editorial-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.editorial-modal {
+  background: var(--color-parchment);
+  border: 1px solid var(--color-warm-stone);
+  border-radius: var(--radius-cards);
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  padding: 28px;
+  position: relative;
+}
+
+.modal-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+  border-bottom: 1px solid var(--color-warm-stone);
+  padding-bottom: 14px;
+}
+
+.modal-close-x {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--color-onyx-warm);
+  cursor: pointer;
+  line-height: 1;
+}

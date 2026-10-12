@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>NutriTrack — Amrit Palace Editorial</title>
+
+  <!-- PWA & Mobile Meta Tags (iPhone Safari) -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="NutriTrack">
+  <meta name="theme-color" content="#d8cbb8">
+  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Estilos del Sistema Editorial Amrit Palace -->
+  <link rel="stylesheet" href="css/amrit-palace.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+
+  <!-- ==========================================
+       CABECERA EDITORIAL & SELECTOR DE PERFIL
+       ========================================== -->
+  <header class="editorial-header">
+    <div class="header-inner">
+      <div class="brand-wrapper">
+        <h1 class="brand-logo-text">NutriTrack</h1>
+        <span class="brand-submark">Edición Editorial</span>
+      </div>
+
+      <!-- Selector de Perfil Rápido (1 Clic) -->
+      <div class="profile-pill-trigger" id="header-profile-trigger" title="Cambiar o gestionar perfiles">
+        <div class="profile-avatar-circle" id="header-profile-avatar">AV</div>
+        <span class="profile-name-text" id="header-profile-name">Alejandro V.</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+    </div>
+  </header>
+
+  <!-- Micro-Banner In-App para Recordatorios Hídricos -->
+  <div id="in-app-reminder-banner" class="in-app-banner" style="display: none;">
+    <div id="in-app-reminder-text">Momento de pausa: 250 ml de agua fresca para tu metabolismo.</div>
+    <button type="button" class="in-app-banner-btn" id="btn-dismiss-reminder" aria-label="Cerrar">&times;</button>
+  </div>
+
+  <!-- Contenedor Principal (Spread Editorial) -->
+  <div class="main-layout-container">
+
+    <!-- Barra de Navegación de Fecha Editorial -->
+    <div class="editorial-card" style="padding: 12px 18px; margin-bottom: 20px;">
+      <div style="display: flex; justify-content: space-between; align-items: center;">
+        <button type="button" class="btn-editorial-ghost btn-micro" id="btn-prev-day">
+          &larr; Ayer
+        </button>
+
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="editorial-display heading-sm" id="date-label-display">Hoy</span>
+          <input type="date" id="date-picker-input" style="opacity:0; position:absolute; width:1px; height:1px;">
+          <button type="button" class="btn-editorial-ghost btn-micro" id="btn-calendar-trigger" title="Elegir fecha">
+            Calendario
+          </button>
+        </div>
+
+        <button type="button" class="btn-editorial-ghost btn-micro" id="btn-next-day">
+          Mañana &rarr;
+        </button>
+      </div>
+    </div>
+
+    <!-- Contenedor de 3 Columnas Desktop / Vistas Mobile -->
+    <div class="editorial-columns-grid">
+
+      <!-- ==========================================
+           COLUMNA 1: PERFIL, HIDRATACIÓN & REFRIGERADOR
+           ========================================== -->
+      <aside class="col-panel col-sidebar-left tab-view-content" id="tab-view-profile">
+        
+        <!-- Tarjeta de Datos Biométricos -->
+        <div class="editorial-card-elevated">
+          <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px;">
+            <span class="sans-label">Biometría Activa</span>
+            <span class="sans-meta" id="profile-meta-summary">29a • 76kg • 178cm</span>
+          </div>
+          
+          <h2 class="editorial-display heading-md" id="profile-display-name">Alejandro Valdés</h2>
+          <p class="sans-body" id="profile-goal-badge" style="margin-top: 4px; color: var(--color-espresso);">
+            Déficit Moderado (-20%)
+          </p>
+
+          <hr class="hairline-rule">
+
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 4px;">
+            <span class="sans-meta">Gasto Basal (TMB):</span>
+            <strong id="profile-bmr-display">1,735 kcal</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 14px;">
+            <span class="sans-meta">Gasto Total (TDEE):</span>
+            <strong id="profile-tdee-display">2,689 kcal</strong>
+          </div>
+
+          <button type="button" class="btn-editorial-ghost" id="btn-open-profile-modal" style="width: 100%;">
+            Ajustar Perfil & Metas
+          </button>
+        </div>
+
+        <!-- Módulo de Hidratación Inteligente -->
+        <div class="editorial-card" id="tab-view-water">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="sans-label">Hidratación Diaria</span>
+            <span class="sans-meta" id="water-exercise-bonus">+0 ml ejercicio</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 6px; margin: 8px 0;">
+            <span class="editorial-display heading-lg" id="water-consumed-num">0</span>
+            <span class="sans-meta" id="water-target-num">/ 2,660 ml</span>
+          </div>
+
+          <!-- Barra de Progreso Hídrico (Saffron Glow sutil) -->
+          <div class="editorial-progress-track">
+            <div class="editorial-progress-fill" id="water-progress-fill"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; font-size: 11px; color: var(--color-walnut);">
+            <span id="water-percent-label">0% completado</span>
+            <span id="water-remaining-label">Faltan 2,660 ml</span>
+          </div>
+
+          <!-- Selectores Táctiles Rápidos -->
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 14px 0 8px 0;">
+            <button type="button" class="btn-editorial-ghost btn-micro" data-water="250">+250 ml</button>
+            <button type="button" class="btn-editorial-ghost btn-micro" data-water="500">+500 ml</button>
+            <button type="button" class="btn-editorial-ghost btn-micro" data-water="100">+100 ml</button>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-bottom: 12px;">
+            <input type="number" id="input-custom-water" class="editorial-input" placeholder="ml exactos" style="min-height: 36px; padding: 6px 10px; font-size: 13px;" inputmode="numeric">
+            <button type="button" class="btn-editorial-dark btn-micro" id="btn-add-custom-water">Agregar</button>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--color-warm-stone); padding-top: 10px;">
+            <button type="button" class="btn-editorial-ghost btn-micro" id="btn-undo-water" style="border:none; color: var(--color-espresso);">
+              &#8630; Deshacer último
+            </button>
+            <label style="display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer;">
+              <input type="checkbox" id="toggle-water-notifications">
+              <span class="sans-meta">Recordatorios</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Módulo de Acceso a "Mi Refrigerador" -->
+        <div class="editorial-card" id="tab-view-fridge">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="sans-label">Mi Refrigerador</span>
+            <span class="sans-meta" id="fridge-count-badge">10 insumos</span>
+          </div>
+
+          <p class="sans-body" style="margin: 8px 0 14px 0; font-size: 13px;">
+            Marca los ingredientes disponibles en casa para filtrar automáticamente las recomendaciones de alta cocina.
+          </p>
+
+          <button type="button" class="btn-editorial-ghost" id="btn-open-fridge-modal" style="width: 100%;">
+            Gestionar Insumos en Casa
+          </button>
+        </div>
+
+      </aside>
+
+      <!-- ==========================================
+           COLUMNA 2: BALANCE NETO, COMIDAS & EJERCICIO
+           ========================================== -->
+      <main class="col-panel col-center-feed tab-view-content active" id="tab-view-journal">
+        
+        <!-- Tarjeta de Balance Metabólico Diario Neto -->
+        <section class="editorial-card-elevated" style="padding: 24px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span class="sans-label">Balance Neto Diario</span>
+            <span class="sans-label" id="balance-target-header" style="color: var(--color-onyx-warm);">Meta: 2,151 kcal</span>
+          </div>
+
+          <div style="display: flex; align-items: baseline; gap: 12px; margin: 10px 0 6px 0;">
+            <span class="editorial-display heading-xl" id="net-calories-display">0</span>
+            <div>
+              <span class="sans-label" style="display: block;">kcal netas</span>
+              <span class="sans-meta" id="math-net-formula">Consumo: 0 • Quema: 0</span>
+            </div>
+          </div>
+
+          <!-- Barra de Progreso con Acento Saffron Glow -->
+          <div class="editorial-progress-track" style="height: 10px;">
+            <div class="editorial-progress-fill" id="net-progress-fill"></div>
+          </div>
+
+          <!-- Mensaje de Estado / Desglose de Exceso -->
+          <div id="net-status-box" style="margin-top: 8px; font-size: 13px; font-weight: 500; color: var(--color-espresso);">
+            Calculando balance...
+          </div>
+
+          <!-- Cuadrícula de Macronutrientes -->
+          <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 18px; border-top: 1px solid var(--color-warm-stone); padding-top: 14px;">
+            <div>
+              <span class="sans-meta">Proteína</span>
+              <div class="editorial-display heading-sm" id="macro-prot-sum">0g</div>
+              <span class="sans-meta" id="macro-prot-tar">/ 152g</span>
+            </div>
+            <div>
+              <span class="sans-meta">Carbos</span>
+              <div class="editorial-display heading-sm" id="macro-carb-sum">0g</div>
+              <span class="sans-meta" id="macro-carb-tar">/ 240g</span>
+            </div>
+            <div>
+              <span class="sans-meta">Grasas</span>
+              <div class="editorial-display heading-sm" id="macro-fat-sum">0g</div>
+              <span class="sans-meta" id="macro-fat-tar">/ 60g</span>
+            </div>
+            <div>
+              <span class="sans-meta">Fibra</span>
+              <div class="editorial-display heading-sm" id="macro-fiber-sum">0g</div>
+              <span class="sans-meta">&ge; 28g</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Registro de Actividad Física Diaria -->
+        <section class="editorial-card">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+              <span class="sans-label">Gasto Activo & Ejercicio</span>
+              <div style="font-size: 14px; font-weight: 600; margin-top: 2px;" id="exercise-burned-sum">0 kcal quemadas hoy</div>
+            </div>
+            <button type="button" class="btn-editorial-ghost btn-micro" id="btn-open-exercise-modal">
+              + Registrar Ejercicio
+            </button>
+          </div>
+
+          <div id="exercise-entries-list" style="margin-top: 10px;"></div>
+        </section>
+
+        <!-- Secciones de Comidas (Desayuno, Almuerzo, Cena, Snacks) -->
+        <section id="meals-timeline-container" style="display: flex; flex-direction: column; gap: 16px;">
+          <!-- Renderizado reactivamente por meals.js / app.js -->
+        </section>
+
+      </main>
+
+      <!-- ==========================================
+           COLUMNA 3: RECOMENDADOR CULINARIO & CHECK-IN
+           ========================================== -->
+      <aside class="col-panel col-sidebar-right tab-view-content" id="tab-view-kitchen">
+        
+        <div class="editorial-card-elevated">
+          <span class="sans-label">Recomendaciones de Cocina</span>
+          <h2 class="editorial-display heading-md" style="margin-top: 4px;">Cocina para Ti</h2>
+          <p class="sans-body" style="font-size: 13px; margin: 6px 0 14px 0;">
+            Algoritmo heurístico que prioriza lo que tienes en casa, tu margen calórico y tu nivel de fatiga.
+          </p>
+
+          <!-- Check-in Contextual del Día -->
+          <div style="background: var(--color-parchment); border: 1px solid var(--color-warm-stone); padding: 12px; margin-bottom: 14px;">
+            <div style="margin-bottom: 10px;">
+              <label class="sans-label" style="font-size: 11px;" for="select-cook-time">Tiempo Disponible</label>
+              <select id="select-cook-time" class="editorial-select" style="min-height: 38px; font-size: 13px; margin-top: 4px;">
+                <option value="any">Cualquier tiempo</option>
+                <option value="quick">Menos de 10 min</option>
+                <option value="medium">15 a 25 min</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="sans-label" style="font-size: 11px;" for="select-cook-energy">Nivel de Energía</label>
+              <select id="select-cook-energy" class="editorial-select" style="min-height: 38px; font-size: 13px; margin-top: 4px;">
+                <option value="any">Normal</option>
+                <option value="exhausted">Agotado (cero ganas de ensuciar)</option>
+                <option value="energetic">Con energía / Tengo tiempo</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Contenedor de Platillos Recomendados -->
+          <div id="recommendations-list-container" style="display: flex; flex-direction: column; gap: 14px;">
+            <!-- Renderizado dinámicamente -->
+          </div>
+        </div>
+
+      </aside>
+
+    </div>
+
+  </div>
+
+  <!-- ==========================================
+       BARRA INFERIOR DE NAVEGACIÓN MÓVIL
+       ========================================== -->
+  <nav class="editorial-bottom-nav">
+    <button type="button" class="nav-tab-btn active" data-tab="journal">
+      <svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+      <span>Diario</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-tab="water">
+      <svg viewBox="0 0 24 24"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path></svg>
+      <span>Agua</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-tab="fridge">
+      <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="0"></rect><line x1="4" y1="10" x2="20" y2="10"></line><line x1="8" y1="6" x2="8" y2="7"></line><line x1="8" y1="14" x2="8" y2="16"></line></svg>
+      <span>Cocina</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-tab="kitchen">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 6v6l4 2"></path></svg>
+      <span>Recetas</span>
+    </button>
+    <button type="button" class="nav-tab-btn" data-tab="profile">
+      <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+      <span>Perfil</span>
+    </button>
+  </nav>
+
+  <!-- ==========================================
+       MODAL 1: SELECTOR DE ALIMENTO A COMIDA
+       ========================================== -->
+  <div class="editorial-overlay" id="modal-food-picker-overlay">
+    <div class="editorial-modal">
+      <div class="modal-header-row">
+        <div>
+          <span class="sans-label" id="picker-modal-subtitle">Registro en comida</span>
+          <h3 class="editorial-display heading-md" id="picker-modal-title">Agregar Alimento</h3>
+        </div>
+        <button type="button" class="modal-close-x" id="btn-close-food-picker">&times;</button>
+      </div>
+
+      <!-- Buscador -->
+      <div style="margin-bottom: 12px;">
+        <input type="text" id="picker-search-input" class="editorial-input" placeholder="Buscar entre 515 alimentos..." autocomplete="off">
+      </div>
+
+      <!-- Filtro Categorías -->
+      <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px;" id="picker-categories-scroll"></div>
+
+      <!-- Lista de resultados -->
+      <div id="picker-results-list" style="max-height: 220px; overflow-y: auto; border: 1px solid var(--color-warm-stone); margin-bottom: 14px;"></div>
+
+      <!-- Editor de porción y método de cocción del alimento seleccionado -->
+      <div id="picker-selected-item-box" style="display: none; background: var(--color-linen); padding: 14px; border: 1px solid var(--color-warm-stone);">
+        <h4 class="editorial-display heading-sm" id="picker-selected-name">Nombre</h4>
+        <span class="sans-meta" id="picker-selected-def-portion">Porción por defecto</span>
+
+        <!-- Factor de Cocción (Módulo 5) -->
+        <div style="margin: 10px 0;">
+          <label class="sans-label" style="font-size: 11px;">Método Culinario</label>
+          <select id="picker-cooking-method" class="editorial-select" style="min-height: 36px; font-size: 13px; margin-top: 4px;">
+            <option value="raw">Crudo / Al vapor / Hervido (+0g grasa)</option>
+            <option value="plancha">A la plancha con spray/gotas de aceite (+3g grasa / ~27 kcal)</option>
+            <option value="fried">Salteado / Frito con aceite (+11g grasa / ~99 kcal)</option>
+          </select>
+        </div>
+
+        <!-- Controles Duales Sincronizados -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 10px 0;">
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Gramos</label>
+            <input type="number" id="picker-grams-input" class="editorial-input" inputmode="decimal" style="font-size: 16px; font-weight: 700;">
+          </div>
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Porciones</label>
+            <input type="number" id="picker-portions-input" class="editorial-input" inputmode="decimal" step="0.25" style="font-size: 16px; font-weight: 700;">
+          </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-around; padding: 8px; background: var(--color-parchment); margin-bottom: 12px; font-size: 12px; font-weight: 600;">
+          <span id="picker-preview-cals">0 kcal</span>
+          <span id="picker-preview-prot">P: 0g</span>
+          <span id="picker-preview-carb">C: 0g</span>
+          <span id="picker-preview-fat">G: 0g</span>
+        </div>
+
+        <button type="button" class="btn-editorial-dark" id="btn-confirm-add-food" style="width: 100%;">
+          + Registrar en Comida
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 2: EDICIÓN IN-SITU DE ALIMENTO YA REGISTRADO
+       ========================================== -->
+  <div class="editorial-overlay" id="modal-insitu-overlay">
+    <div class="editorial-modal">
+      <div class="modal-header-row">
+        <div>
+          <span class="sans-label">Edición In-Situ</span>
+          <h3 class="editorial-display heading-md" id="insitu-item-title">Modificar Alimento</h3>
+        </div>
+        <button type="button" class="modal-close-x" id="btn-close-insitu">&times;</button>
+      </div>
+
+      <div style="margin: 12px 0;">
+        <label class="sans-label" style="font-size: 11px;">Método Culinario</label>
+        <select id="insitu-cooking-method" class="editorial-select" style="min-height: 38px; font-size: 13px; margin-top: 4px;">
+          <option value="raw">Crudo / Al vapor / Hervido (+0g grasa)</option>
+          <option value="plancha">A la plancha con gotas de aceite (+3g grasa)</option>
+          <option value="fried">Salteado / Frito con aceite (+11g grasa)</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 12px 0;">
+        <div>
+          <label class="sans-label" style="font-size: 11px;">Cantidad en Gramos</label>
+          <input type="number" id="insitu-grams-input" class="editorial-input" inputmode="decimal" style="font-size: 18px; font-weight: 700;">
+        </div>
+        <div>
+          <label class="sans-label" style="font-size: 11px;">Nº de Porciones</label>
+          <input type="number" id="insitu-portions-input" class="editorial-input" inputmode="decimal" step="0.25" style="font-size: 18px; font-weight: 700;">
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-around; padding: 10px; background: var(--color-linen); margin-bottom: 16px; font-weight: 600;">
+        <span id="insitu-calc-cals">0 kcal</span>
+        <span id="insitu-calc-prot">P: 0g</span>
+        <span id="insitu-calc-carb">C: 0g</span>
+        <span id="insitu-calc-fat">G: 0g</span>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-editorial-dark" id="btn-save-insitu" style="flex: 2;">
+          Actualizar Cantidad
+        </button>
+        <button type="button" class="btn-editorial-ghost" id="btn-delete-insitu" style="flex: 1; color: #A63A2B; border-color: #A63A2B;">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 3: GESTIÓN DE MI REFRIGERADOR
+       ========================================== -->
+  <div class="editorial-overlay" id="modal-fridge-overlay">
+    <div class="editorial-modal" style="max-width: 640px;">
+      <div class="modal-header-row">
+        <div>
+          <span class="sans-label">Inventario Doméstico</span>
+          <h3 class="editorial-display heading-md">Mi Refrigerador</h3>
+        </div>
+        <button type="button" class="modal-close-x" id="btn-close-fridge">&times;</button>
+      </div>
+
+      <p class="sans-body" style="font-size: 13px; margin-bottom: 12px;">
+        Toca cualquier alimento para marcarlo o desmarcarlo como disponible en casa.
+      </p>
+
+      <input type="text" id="fridge-search-input" class="editorial-input" placeholder="Buscar insumos..." style="margin-bottom: 12px;">
+
+      <div style="display: flex; gap: 6px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 12px;" id="fridge-categories-pills"></div>
+
+      <div id="fridge-items-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 8px; max-height: 380px; overflow-y: auto; border: 1px solid var(--color-warm-stone); padding: 8px;"></div>
+
+      <div style="margin-top: 14px; display: flex; justify-content: flex-end;">
+        <button type="button" class="btn-editorial-dark" id="btn-close-fridge-done">
+          Listo, Guardar Despensa
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 4: GESTOR MULTIPERFIL & BIOMETRÍA
+       ========================================== -->
+  <div class="editorial-overlay" id="modal-profile-overlay">
+    <div class="editorial-modal" style="max-width: 600px;">
+      <div class="modal-header-row">
+        <div>
+          <span class="sans-label">Arquitectura Multiperfil</span>
+          <h3 class="editorial-display heading-md">Perfiles & Metas</h3>
+        </div>
+        <button type="button" class="modal-close-x" id="btn-close-profile-modal">&times;</button>
+      </div>
+
+      <!-- Selector de Perfiles Existentes -->
+      <div style="margin-bottom: 16px;">
+        <label class="sans-label" style="font-size: 11px;">Seleccionar Perfil Activo</label>
+        <div id="profiles-switcher-list" style="display: flex; flex-direction: column; gap: 6px; margin-top: 6px;"></div>
+      </div>
+
+      <hr class="hairline-rule">
+
+      <!-- Formulario de Biometría del Perfil Activo -->
+      <form id="profile-editor-form">
+        <h4 class="editorial-display heading-sm" style="margin-bottom: 10px;">Editar Datos del Perfil</h4>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 10px;">
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Nombre Completo</label>
+            <input type="text" id="prof-name-input" class="editorial-input" required>
+          </div>
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Sexo Biológico</label>
+            <select id="prof-sex-input" class="editorial-select">
+              <option value="male">Hombre</option>
+              <option value="female">Mujer</option>
+            </select>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 10px;">
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Edad</label>
+            <input type="number" id="prof-age-input" class="editorial-input" min="14" max="99" required>
+          </div>
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Altura (cm)</label>
+            <input type="number" id="prof-height-input" class="editorial-input" min="120" max="230" required>
+          </div>
+          <div>
+            <label class="sans-label" style="font-size: 11px;">Peso (kg)</label>
+            <input type="number" id="prof-weight-input" class="editorial-input" min="35" max="220" step="0.1" required>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <label class="sans-label" style="font-size: 11px;">Nivel de Actividad Física</label>
+          <select id="prof-activity-input" class="editorial-select">
+            <option value="sedentary">Sedentario (escritorio, poco o ningún ejercicio - 1.2)</option>
+            <option value="light">Ligero (1-3 días de ejercicio por semana - 1.375)</option>
+            <option value="moderate">Moderado (3-5 días de ejercicio - 1.55)</option>
+            <option value="intense">Intenso (6-7 días de entrenamiento - 1.725)</option>
+            <option value="athlete">Atleta de élite o trabajo físico pesado - 1.9</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom: 10px;">
+          <label class="sans-label" style="font-size: 11px;">Objetivo Metabólico</label>
+          <select id="prof-goal-input" class="editorial-select">
+            <option value="deficit_moderate">Déficit Moderado Estándar (-20% kcal / Recomendado)</option>
+            <option value="deficit_light">Déficit Ligero (-15% kcal / Sostenible)</option>
+            <option value="deficit_intense">Déficit Intenso Acelerado (-25% kcal)</option>
+            <option value="maintenance">Mantenimiento Eucalórico (100% TDEE)</option>
+            <option value="surplus">Superávit Muscular Limpio (+12% TDEE)</option>
+            <option value="manual">Ajuste Numérico Manual</option>
+          </select>
+        </div>
+
+        <div id="manual-kcal-wrap" style="display: none; margin-bottom: 10px;">
+          <label class="sans-label" style="font-size: 11px;">Calorías Diarias Manuales (kcal)</label>
+          <input type="number" id="prof-manual-kcal-input" class="editorial-input" placeholder="Ej. 1950">
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <label class="sans-label" style="font-size: 11px;">Alergias o Intolerancias</label>
+          <input type="text" id="prof-allergies-input" class="editorial-input" placeholder="Ej. Huevo, Pescado, Lácteos (o 'Ninguna')">
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 14px;">
+          <button type="submit" class="btn-editorial-dark" style="flex: 2;">
+            Guardar Cambios de Perfil
+          </button>
+          <button type="button" class="btn-editorial-ghost" id="btn-create-new-profile-trigger" style="flex: 1;">
+            + Nuevo Perfil
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ==========================================
+       MODAL 5: REGISTRAR EJERCICIO FÍSICO
+       ========================================== -->
+  <div class="editorial-overlay" id="modal-exercise-overlay">
+    <div class="editorial-modal">
+      <div class="modal-header-row">
+        <div>
+          <span class="sans-label">Gasto Calórico Activo</span>
+          <h3 class="editorial-display heading-md">Registrar Ejercicio</h3>
+        </div>
+        <button type="button" class="modal-close-x" id="btn-close-exercise">&times;</button>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <label class="sans-label" style="font-size: 11px;">Tipo de Actividad</label>
+        <select id="exercise-type-select" class="editorial-select" style="margin-top: 4px;">
+          <option value="walking">Caminata activa / paso ligero</option>
+          <option value="running">Carrera continua / Running</option>
+          <option value="strength">Pesas / Entrenamiento de fuerza</option>
+          <option value="cycling">Ciclismo de ruta o estático</option>
+          <option value="swimming">Natación estilo libre</option>
+          <option value="hiit">HIIT / Circuitos funcionales</option>
+          <option value="boxing">Boxeo / Artes marciales</option>
+          <option value="yoga">Yoga vinyasa / Pilates</option>
+        </select>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px;">
+        <div>
+          <label class="sans-label" style="font-size: 11px;">Duración (minutos)</label>
+          <input type="number" id="exercise-duration-input" class="editorial-input" value="45" min="5" max="300" inputmode="numeric">
+        </div>
+        <div>
+          <label class="sans-label" style="font-size: 11px;">Intensidad</label>
+          <select id="exercise-intensity-select" class="editorial-select">
+            <option value="low">Ligera</option>
+            <option value="moderate" selected>Moderada</option>
+            <option value="high">Alta / Muy intensa</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="background: var(--color-linen); padding: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+        <span class="sans-meta">Estimación de Quema:</span>
+        <strong class="editorial-display heading-sm" id="exercise-preview-burned">0 kcal</strong>
+      </div>
+
+      <button type="button" class="btn-editorial-dark" id="btn-confirm-add-exercise" style="width: 100%;">
+        + Añadir al Gasto Neto
+      </button>
+    </div>
+  </div>
+
+  <!-- Scripts Modulares -->
+  <script src="js/foods-data.js"></script>
+  <script src="js/db.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/hydration.js"></script>
+  <script src="js/refrigerator.js"></script>
+  <script src="js/recommender.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
